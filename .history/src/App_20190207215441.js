@@ -3,9 +3,8 @@ import { Query } from "react-apollo";
 import OneGraphApolloClient from "onegraph-apollo-client";
 import OneGraphAuth from "onegraph-auth";
 import React, { Component } from "react";
-import { config } from "./config";
 
-const APP_ID = config.OneGraph;
+const APP_ID = "4b1a8654-2b1f-46ef-bb5e-a3424c2a7003";
 
 const GET_SPOTIFY = gql`
   query {
@@ -38,23 +37,37 @@ class App extends Component {
     isLoggedIn: false
   };
 
-  _authLoginWithSpotify = async () => {
-    await this._oneGraphAuth.login("spotify");
-    this.setState({ isLoggedIn: true });
-  };
-
-  _authLogoutWithSpotify = async () => {
-    await this._oneGraphAuth.logout("spotify");
-    this.setState({ isLoggedIn: false });
-  };
-
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     this._oneGraphAuth = new OneGraphAuth({
       appId: APP_ID
     });
     this._oneGraphClient = new OneGraphApolloClient({
       oneGraphAuth: this._oneGraphAuth
     });
+  }
+
+  _authWithSpotify = async () => {
+    await this._oneGraphAuth.login("spotify");
+    const isLoggedIn = await this._oneGraphAuth.isLoggedIn("spotify");
+    this.setState({ isLoggedIn: isLoggedIn });
+  };
+
+  _authLogoutWithSpotify = async () => {
+    await this._oneGraphAUth.logout("spotify");
+
+    // const isLoggedOut = await this._oneGraphAuth.isLoggedOut("spotify");
+    this.setState({ isLoggedIn: isLoggedIn });
+    // .then(response => {
+    //   if (response.result === "success") {
+    //     console.log("Logout succeeded");
+    //   } else {
+    //     console.log("Logout failed");
+    //   }
+    // });
+  };
+
+  componentDidMount() {
     this._oneGraphAuth
       .isLoggedIn("spotify")
       .then(isLoggedIn => this.setState({ isLoggedIn }));
@@ -64,9 +77,8 @@ class App extends Component {
     console.log("GET_SPOTIFY :", GET_SPOTIFY.data);
     return (
       <div className="App">
-        {this.state.isLoggedIn ? <h1>hello</h1> : <h1>bye</h1>}
         <div className="App-intro">
-          <button onClick={this._authLogoutWithSpotify}>Log out</button>
+          <button>Log out</button>
           <Query query={GET_SPOTIFY}>
             {({ loading, error, data }) => {
               if (loading) return <div>Loading...</div>;
@@ -74,7 +86,7 @@ class App extends Component {
                 return (
                   <button
                     style={{ fontSize: 18 }}
-                    onClick={this._authLoginWithSpotify}
+                    onClick={this._authWithSpotify}
                   >
                     Login with Spotify
                   </button>
@@ -82,9 +94,9 @@ class App extends Component {
               return (
                 <div>
                   <h1>
-                    username: {data.spotify.me.id}
+                    {data.spotify.me.id}
                     <br />
-                    <span>Followers: {data.spotify.me.followers.total}</span>
+                    <span>{data.spotify.me.followers.total}</span>
                   </h1>
                   <img
                     alt={data.spotify.me.id}

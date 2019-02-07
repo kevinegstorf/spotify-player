@@ -3,9 +3,8 @@ import { Query } from "react-apollo";
 import OneGraphApolloClient from "onegraph-apollo-client";
 import OneGraphAuth from "onegraph-auth";
 import React, { Component } from "react";
-import { config } from "./config";
 
-const APP_ID = config.OneGraph;
+const APP_ID = "4b1a8654-2b1f-46ef-bb5e-a3424c2a7003";
 
 const GET_SPOTIFY = gql`
   query {
@@ -38,6 +37,16 @@ class App extends Component {
     isLoggedIn: false
   };
 
+  // constructor(props) {
+  //   super(props);
+  // }
+  oneGraphAuth = new OneGraphAuth({
+    appId: APP_ID
+  });
+  oneGraphClient = new OneGraphApolloClient({
+    oneGraphAuth: this._oneGraphAuth
+  });
+
   _authLoginWithSpotify = async () => {
     await this._oneGraphAuth.login("spotify");
     this.setState({ isLoggedIn: true });
@@ -49,12 +58,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this._oneGraphAuth = new OneGraphAuth({
-      appId: APP_ID
-    });
-    this._oneGraphClient = new OneGraphApolloClient({
-      oneGraphAuth: this._oneGraphAuth
-    });
     this._oneGraphAuth
       .isLoggedIn("spotify")
       .then(isLoggedIn => this.setState({ isLoggedIn }));

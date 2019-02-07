@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import OneGraphApolloClient from "onegraph-apollo-client";
 import OneGraphAuth from "onegraph-auth";
 import React, { Component } from "react";
-import { config } from "./config";
+import { config } from "../config";
 
 const APP_ID = config.OneGraph;
 

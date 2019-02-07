@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-boost": "^0.1.27",
+    "graphql": "^14.1.1",
+    "onegraph-apollo-client": "^1.2.21",
+    "onegraph-auth": "^1.2.22",
     "react": "^16.8.1",
+    "react-apollo": "^2.5.0-beta.1",
     "react-dom": "^16.8.1",
     "react-scripts": "2.1.3"
   },

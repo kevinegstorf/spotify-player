@@ -1,0 +1,23 @@
+# Todo
+
+- create music player
+- create logout just need to wrap it in state so it rerenders
+- refactor components
+- cool loader
+- maybe routing
+- add cool styling
+  - animation
+- testing
+- write blog
+  - react graphql apollo client "hooks" onegraph api
+    - what we will create
+    - background
+      - hooks
+      - graphql client
+      - apollo query and mutation
+      - onegraph api
+    - setup
+      - create account on onegraph
+      - explain onegraph dashboard
+    - actual coding
+    - writing tests

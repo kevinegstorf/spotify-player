@@ -3,9 +3,8 @@ import { Query } from "react-apollo";
 import OneGraphApolloClient from "onegraph-apollo-client";
 import OneGraphAuth from "onegraph-auth";
 import React, { Component } from "react";
-import { config } from "./config";
 
-const APP_ID = config.OneGraph;
+const APP_ID = "4b1a8654-2b1f-46ef-bb5e-a3424c2a7003";
 
 const GET_SPOTIFY = gql`
   query {
@@ -38,8 +37,19 @@ class App extends Component {
     isLoggedIn: false
   };
 
-  _authLoginWithSpotify = async () => {
+  constructor(props) {
+    super(props);
+    this._oneGraphAuth = new OneGraphAuth({
+      appId: APP_ID
+    });
+    this._oneGraphClient = new OneGraphApolloClient({
+      oneGraphAuth: this._oneGraphAuth
+    });
+  }
+
+  _authWithSpotify = async () => {
     await this._oneGraphAuth.login("spotify");
+    // const isLoggedIn = await this._oneGraphAuth.isLoggedIn("spotify");
     this.setState({ isLoggedIn: true });
   };
 
@@ -49,12 +59,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this._oneGraphAuth = new OneGraphAuth({
-      appId: APP_ID
-    });
-    this._oneGraphClient = new OneGraphApolloClient({
-      oneGraphAuth: this._oneGraphAuth
-    });
     this._oneGraphAuth
       .isLoggedIn("spotify")
       .then(isLoggedIn => this.setState({ isLoggedIn }));
@@ -63,8 +67,8 @@ class App extends Component {
   render() {
     console.log("GET_SPOTIFY :", GET_SPOTIFY.data);
     return (
+      isLoggedIn ? <h1>hello</h1> : <h1>Hello</h1>
       <div className="App">
-        {this.state.isLoggedIn ? <h1>hello</h1> : <h1>bye</h1>}
         <div className="App-intro">
           <button onClick={this._authLogoutWithSpotify}>Log out</button>
           <Query query={GET_SPOTIFY}>
@@ -74,7 +78,7 @@ class App extends Component {
                 return (
                   <button
                     style={{ fontSize: 18 }}
-                    onClick={this._authLoginWithSpotify}
+                    onClick={this._authWithSpotify}
                   >
                     Login with Spotify
                   </button>

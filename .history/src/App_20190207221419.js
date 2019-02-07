@@ -3,9 +3,8 @@ import { Query } from "react-apollo";
 import OneGraphApolloClient from "onegraph-apollo-client";
 import OneGraphAuth from "onegraph-auth";
 import React, { Component } from "react";
-import { config } from "./config";
 
-const APP_ID = config.OneGraph;
+const APP_ID = "4b1a8654-2b1f-46ef-bb5e-a3424c2a7003";
 
 const GET_SPOTIFY = gql`
   query {
@@ -34,6 +33,16 @@ const GET_SPOTIFY = gql`
 `;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this._oneGraphAuth = new OneGraphAuth({
+      appId: APP_ID
+    });
+    this._oneGraphClient = new OneGraphApolloClient({
+      oneGraphAuth: this._oneGraphAuth
+    });
+  }
+
   state = {
     isLoggedIn: false
   };
